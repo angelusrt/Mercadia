@@ -9,7 +9,7 @@ function FirstPage({navigation}){
     return(
         <View style={{ flex: 1, backgroundColor:colors.primary }}>
             <View style={ style.view }>
-                <View style={{flex:5}}>
+                <View style={{flex:3}}>
                     {/*<FlatList>
                         <Text>M</Text>
                         <Text>Mercadia</Text>
@@ -19,7 +19,7 @@ function FirstPage({navigation}){
                     <Text style={ style.title } >Comece sua aventura agora ;)</Text>
                     <Text style={ style.subtitle }>Conheça nosso catalogo, que irá te surpreender!</Text>
                 </View>
-                <View style={{flex:1}}>
+                <View style={{flex:1, justifyContent: "flex-end"}}>
                     <TouchableOpacity
                         style={{ backgroundColor: colors.primary, ...style.button}}
                         onPress={ () => navigation.navigate("Entrar")}
@@ -41,38 +41,63 @@ function FirstPage({navigation}){
 
 function Login(){
     return(
-        <View style={ style.view }>
-            <Text>Email</Text>
-            <TextInput/>
+        <View style={{flex: 1, backgroundColor: colors.primary}}>
+            <View style={{justifyContent: "flex-end", ...style.view}}>
+                <Text style={ style.semititle }>Email</Text>
+                <TextInput style={ style.textInput }/>
 
-            <Text>Senha</Text>
-            <TextInput/>
-            <Button color={colors.primary} title="Esqueceu sua senha?"/>
+                <Text style={ style.semititle }>Senha</Text>
+                <TextInput style={ style.textInput }/>
 
-            <Text>Ou</Text>
+                <TouchableOpacity
+                    style={{ backgroundColor: colors.primary}}
+                >
+                    <Text style={ style.demititle }>Esqueceu sua senha?</Text>
+                </TouchableOpacity>
+                
+                <Text style={{alignSelf: "center", ...style.demititle}}>Ou</Text>
 
-            <Button color={colors.primary} title="G Entre com o Google"/>
-            <Button color={colors.primary} title="Entre agora"/>
+                <TouchableOpacity
+                    style={{ backgroundColor: colors.primary, ...style.button}}
+                >
+                    <Text style={ style.buttonText }>G Entre com o Google</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{ backgroundColor: colors.primary, ...style.button}}
+                >
+                    <Text style={ style.buttonText }>Entre agora</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
 
 function Register(){
     return(
-        <View style={ style.view }>
-            <Text>Email</Text>
-            <TextInput/>
+        <View style={{flex: 1, backgroundColor: colors.secundary}}>
+            <View style={{justifyContent: "flex-end", ...style.view}}>
+                <Text style={ style.semititle }>Email</Text>
+                <TextInput style={ style.textInput }/>
 
-            <Text>Senha</Text>
-            <TextInput/>
-            
-            <Text>Respita a senha</Text>
-            <TextInput/>
-            
-            <Text>Ou</Text>
+                <Text style={ style.semititle }>Senha</Text>
+                <TextInput style={ style.textInput }/>
+                
+                <Text style={ style.semititle }>Respita a senha</Text>
+                <TextInput style={ style.textInput }/>
+                
+                <Text style={{alignSelf: "center", ...style.demititle}}>Ou</Text>
 
-            <Button color={colors.secundary} title="G Comece com o Google"/>
-            <Button color={colors.secundary} title="Comece agora"/>
+                <TouchableOpacity
+                    style={{ backgroundColor: colors.secundary, ...style.button}}
+                >
+                    <Text style={ style.buttonText }>G Comcece com o Google</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={{ backgroundColor: colors.secundary, ...style.button}}
+                >
+                    <Text style={ style.buttonText }>Comcece agora</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -84,20 +109,23 @@ function Register(){
     }
     const style = StyleSheet.create({
         view: {
-            height:"80%",
-            width:"80%",
-            alignSelf: "center",
-            marginTop: "auto",
-            marginBottom: "auto" 
+            width: "100%",
+            height: "100%",
+            padding: 30,
+            alignSelf: "center"
         },
         button: {
             width: "100%",
-            marginTop: 10,
-            paddingTop: 10,
-            paddingBottom: 10,
+            marginTop: 15,
+            paddingTop: "5%",
+            paddingBottom: "5%",
             borderWidth: 1, 
             borderColor: colors.white,   
             textAlign: "center"
+        },
+        textInput: {
+            padding: "3%",
+            backgroundColor: colors.white
         },
         buttonText: {
             color: colors.white,
@@ -116,7 +144,20 @@ function Register(){
             fontSize: 22,
             color: colors.white,
             fontWeight: "normal"
+        },
+        semititle: {
+            marginTop: 15,
+            fontSize: 17,
+            color: colors.white,
+            fontWeight: "bold"
+        },
+        demititle: {
+            marginTop: 15,
+            fontSize: 13,
+            color: colors.white,
+            fontWeight: "normal"
         }
+        
     });
 
 export default function Routes(){
@@ -125,11 +166,23 @@ export default function Routes(){
     return(   
         <NavigationContainer>
             <Stack.Navigator initialRouteName="PrimeiraPagina">
-                <Stack.Screen name="PrimeiraPagina" options={{
+                <Stack.Screen name="PrimeiraPagina" component={FirstPage} options={{
                     header: () => null
-                }} component={FirstPage} />
-                <Stack.Screen name="Entrar" component={Login} />
-                <Stack.Screen name="Registrar" component={Register} />
+                }}/>
+                <Stack.Screen name="Entrar" component={Login} options={{
+                    headerStyle: {backgroundColor: colors.primary, shadowColor: 'transparent', elevation: 0 },
+                    headerTintColor: colors.white,
+                    headerTitle: "Mercadia",
+                    headerTitleAlign: "center",
+                    headerBackTitleVisible: false
+                }}/>
+                <Stack.Screen name="Registrar" component={Register} options={{
+                    headerStyle: {backgroundColor: colors.secundary, shadowColor: 'transparent', elevation: 0 },
+                    headerTintColor: colors.white,
+                    headerTitle: "Mercadia",
+                    headerTitleAlign: "center",
+                    headerBackTitleVisible: false
+                }}/>
             </Stack.Navigator>
         </NavigationContainer>
     )
