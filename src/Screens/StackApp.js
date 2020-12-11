@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput,TouchableOpacity } from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { colors, style } from "../Styles"
@@ -44,26 +44,13 @@ function Login(){
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
 
-    const[emailError, setEmailError] = useState("");
-    const[passwordError, setPasswordError] = useState("");
-    const[hasAccount, setHasAccount] = useState(false);
-
+    //Funcionando
     function loginHandler(){
-        fire.auth()
-            .signInWithEmailPassword(email, password)
-            .catch(err => {
-                switch(err.code){
-                    case "auth/invalid-email":
-                    case "auth/user-disabled":
-                    case "auth/user-not-found":
-                        setEmailError(err.message)
-                        break
-                    case "auth/wrong-password":
-                        setPasswordError(err.message)
-                        break
-                }
-            })
+        fire
+        .auth()
+        .signInWithEmailPassword(email, password)
     }
+
     return(
         <View style={{flex: 1, backgroundColor: colors.primary}}>
             <View style={{justifyContent: "flex-end", ...style.view}}>
@@ -73,11 +60,11 @@ function Login(){
                 <Text style={ style.semititle }>Senha</Text>
                 <TextInput onChangeText={ (pass) => setPassword(pass)} style={ style.textInput }/>
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={{ backgroundColor: colors.primary}}
                 >
                     <Text style={ style.demititle }>Esqueceu sua senha?</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 
                 <Text style={{alignSelf: "center", ...style.demititle}}>Ou</Text>
 
@@ -97,28 +84,14 @@ function Login(){
     )
 }
 
-function Register(){
+function Register(){    
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
 
-    const[emailError, setEmailError] = useState("");
-    const[passwordError, setPasswordError] = useState("");
-    const[hasAccount, setHasAccount] = useState(false);
-
+    //Funcionando
     function signinHandler(){
         fire.auth()
-            .createUserWithEmailAndPassword(email, password)
-            .catch(err => {
-                switch(err.code){
-                    case "auth/email-already-in-use":
-                    case "auth/invalid-email":
-                        setEmailError(err.message)
-                        break
-                    case "auth/wrong-password":
-                        setPasswordError(err.message)
-                        break
-                }
-            })
+        .createUserWithEmailAndPassword(email, password)
     }
     async function onGoogleButtonPress() {
         // Get the users ID token
@@ -135,10 +108,10 @@ function Register(){
         <View style={{flex: 1, backgroundColor: colors.secundary}}>
             <View style={{justifyContent: "flex-end", ...style.view}}>
                 <Text style={ style.semititle }>Email</Text>
-                <TextInput style={ style.textInput }/>
+                <TextInput onChangeText={ text => setEmail(text)} style={ style.textInput }/>
 
                 <Text style={ style.semititle }>Senha</Text>
-                <TextInput style={ style.textInput }/>
+                <TextInput onChangeText={ text => setPassword(text)} style={ style.textInput }/>
                 
                 <Text style={ style.semititle }>Respita a senha</Text>
                 <TextInput style={ style.textInput }/>
@@ -149,20 +122,20 @@ function Register(){
                     style={{ backgroundColor: colors.secundary, ...style.button}}
                     onPress={() => onGoogleButtonPress() }
                 >
-                    <Text style={ style.buttonText }>G Comcece com o Google</Text>
+                    <Text style={ style.buttonText }>G Comece com o Google</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{ backgroundColor: colors.secundary, ...style.button}}
                     onPress={() => signinHandler() }
                 >
-                    <Text style={ style.buttonText }>Comcece agora</Text>
+                    <Text style={ style.buttonText }>Comece agora</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
 
-function StackApp(props) {
+function StackApp() {
     const Stack = createStackNavigator();
     
     return (
