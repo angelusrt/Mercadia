@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "481419776334",
+    "project_id": "mercadia-43fd6",
+    "storage_bucket": "mercadia-43fd6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481419776334:android:2fa93308adf3f0a7c94e1f",
+        "android_client_info": {
+          "package_name": "com.MercadiaAndroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481419776334-roer745ejdmoojujkrr1sniqblufl81f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5l3oYb9ofYV2Jw4qYrMCzqPHcFQ9786E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "481419776334-roer745ejdmoojujkrr1sniqblufl81f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
