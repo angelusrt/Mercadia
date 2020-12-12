@@ -13,6 +13,54 @@ export var style = StyleSheet.create({
         padding: 30,
         alignSelf: "center"
     },
+    cardWrapperView:{
+        width: "100%",
+        height: "100%",
+        alignSelf: "center"
+    },
+    cardView: {
+        flex: 1,
+        flexDirection: "row",
+        padding: 15,
+        alignSelf: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 1,
+            height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+        elevation: 6
+    },
+    cardTitle: {
+        fontSize: 22,
+        fontWeight: "bold"
+    },
+    cardSubtitle: {
+        fontSize: 17,
+        fontWeight: "normal"
+    },
+    cardSpecialWrapper: {
+        paddingHorizontal: 5,
+        borderColor: colors.primary,
+        borderWidth: 1
+    },
+    cardSpecial: {
+        fontSize: 14,
+        fontWeight: "normal",
+        color: colors.primary
+    },
+    cardButton: {
+        paddingVertical: 5,
+        paddingHorizontal: 5,
+        textAlign: "center"
+    },
+    cardButtonText: {
+        fontSize: 14,
+        fontWeight: "normal",
+        marginLeft: 10,
+        color: colors.white
+    },
     button: {
         width: "100%",
         marginTop: 15,
@@ -28,32 +76,32 @@ export var style = StyleSheet.create({
     },
     buttonText: {
         color: colors.white,
-        fontWeight: "bold",
         fontSize: 22,
+        fontWeight: "bold",
         textAlign: "center"
     },
     title: {
         marginTop: 70,
         fontSize: 40,
-        color: colors.white,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color: colors.white
     },
     subtitle: {
         marginTop: 15,
         fontSize: 22,
-        color: colors.white,
-        fontWeight: "normal"
+        fontWeight: "normal",
+        color: colors.white
     },
     semititle: {
         marginTop: 15,
         fontSize: 17,
-        color: colors.white,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color: colors.white
     },
     demititle: {
         marginTop: 15,
         fontSize: 13,
-        color: colors.white,
-        fontWeight: "normal"
+        fontWeight: "normal",
+        color: colors.white
     }    
 })

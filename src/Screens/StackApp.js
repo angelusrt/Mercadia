@@ -48,7 +48,7 @@ function Login(){
     function loginHandler(){
         fire
         .auth()
-        .signInWithEmailPassword(email, password)
+        .signInWithEmailAndPassword(email, password)
     }
 
     return(
