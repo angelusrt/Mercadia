@@ -93,16 +93,16 @@ function Register(){
         fire.auth()
         .createUserWithEmailAndPassword(email, password)
     }
-    async function onGoogleButtonPress() {
-        // Get the users ID token
-        const { idToken } = GoogleSignin.signInAsync();
+    // async function onGoogleButtonPress() {
+    //     // Get the users ID token
+    //     const { idToken } = GoogleSignin.signInAsync();
     
-        // Create a Google credential with the token
-        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    //     // Create a Google credential with the token
+    //     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
     
-        // Sign-in the user with the credential
-        return auth().signInWithCredential(googleCredential);
-    }
+    //     // Sign-in the user with the credential
+    //     return auth().signInWithCredential(googleCredential);
+    // }
 
     return(
         <View style={{flex: 1, backgroundColor: colors.secundary}}>

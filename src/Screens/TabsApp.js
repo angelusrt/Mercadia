@@ -3,50 +3,74 @@ import React, { useState, useEffect } from 'react';
 import { createStackNavigator } from "@react-navigation/stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ScrollView, View, Text, TextInput,TouchableOpacity } from "react-native";
+import * as firebase from 'firebase';
 import { FontAwesome } from "@expo/vector-icons";
 
 import { colors, style } from "../Styles" 
 import fire from '../FirebaseConfig';
 import { initAsync } from 'expo-google-sign-in';
+import { debug } from 'react-native-reanimated';
 
 function Home(){
+    const[components, setComponents] = useState([])
+    let userId = fire.auth().currentUser.uid;
+
+    function writeUserData(userId) {
+        fire.database().ref('users/' + userId).push(
+
+        )
+    }
+    useEffect( () => {
+        fire.database().ref('itens/').on('value', snapshot => {
+            let data = snapshot.val()
+            let itens = Object.values(data)
+            
+            setComponents(itens)
+    
+        })},[]
+    )   
+    
+
     return(
         <ScrollView style={{ backgroundColor: colors.white, ...style.cardWrapperView }} >
-            <View style={{ marginVertical: 10, backgroundColor: colors.white, ...style.cardView }}>
-                {/* Foto */}
-                <View style={{ flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
-                    
-                </View>
-                <View style={{ flex: 2 }}>
-                    <View>
-                        {/* Avaliação */}
-                    </View>
-                    <Text style={{ color: colors.secundary, ...style.cardTitle }}>Samsung Galaxy A21s</Text>
-                    <Text style={{ color: colors.secundary, ...style.cardSubtitle }}>R$1299,00</Text>
-                    <View style={{ marginVertical: 10, flex: 1, flexDirection: 'row' }}>
-                        <View style={ style.cardSpecialWrapper }><Text style={ style.cardSpecial }>Novo</Text></View>
-                        <View style={{ marginLeft: 10, ...style.cardSpecialWrapper }}><Text style={ style.cardSpecial }>Frete Gratis</Text></View>
-                    </View>
-                    <View style={{ marginTop: 20, flex: 1, flexDirection: 'row' }}>
-                        <TouchableOpacity
-                        style={{ backgroundColor: colors.primary, ...style.cardButton}}
-                        >
-                            <View style={{ flexDirection: 'row'}}>
-                                <FontAwesome name="shopping-cart" color={colors.white} size={20} />
-                                <Text style={ style.cardButtonText }>Carrinho</Text>
+            {
+                components.map(item => {
+                    return(
+                        <View style={{ marginVertical: 10, backgroundColor: colors.white, ...style.cardView }}>
+                            <View style={{ flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
                             </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                        style={{ marginLeft: 10, backgroundColor: colors.primary, ...style.cardButton}}
-                        >
-                            <View style={{ flexDirection: 'row'}}>
-                                <FontAwesome name="heart" color={colors.white} size={20} />
-                                <Text style={ style.cardButtonText }>Favoritos</Text>
+                            <View style={{ flex: 2 }}>
+                                <View>
+                                </View>
+                                <Text style={{ color: colors.secundary, ...style.cardTitle }}>{ item.nome }</Text>
+                                <Text style={{ color: colors.secundary, ...style.cardSubtitle }}>{ item.preço }</Text>
+                                <View style={{ marginVertical: 10, flex: 1, flexDirection: 'row' }}>
+                                    <View style={ style.cardSpecialWrapper }><Text style={ style.cardSpecial }>{ item.categorias.primeiras }</Text></View>
+                                    <View style={{ marginLeft: 10, ...style.cardSpecialWrapper }}><Text style={ style.cardSpecial }>{ item.categorias.segundas }</Text></View>
+                                </View>
+                                <View style={{ marginTop: 20, flex: 1, flexDirection: 'row' }}>
+                                    <TouchableOpacity
+                                    style={{ backgroundColor: colors.primary, ...style.cardButton}}
+                                    >
+                                        <View style={{ flexDirection: 'row'}}>
+                                            <FontAwesome name="shopping-cart" color={colors.white} size={20} />
+                                            <Text style={ style.cardButtonText }>Carrinho</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                    style={{ marginLeft: 10, backgroundColor: colors.primary, ...style.cardButton}}
+                                    >
+                                        <View style={{ flexDirection: 'row'}}>
+                                            <FontAwesome name="heart" color={colors.white} size={20} />
+                                            <Text style={ style.cardButtonText }>Favoritos</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
+                        </View>
+                    )
+                }) 
+            }
         </ScrollView>
     )
 }

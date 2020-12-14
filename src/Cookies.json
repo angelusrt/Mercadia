@@ -1,0 +1,79 @@
+{
+    "itens": {
+        "1": {
+            "avaliação": 3,
+            "nome": "Samsung Galaxy A21s",
+            "preço": "R$1299,00",
+            "categorias" : {
+                "primeiras" : [
+                    "Novo"
+                ],
+                "segundas" : [
+                    "Frete Gratis"
+                ]
+            }
+        },
+        "2": {
+            "avaliação": 5,
+            "nome": "Teclado Arturia Minilab",
+            "preço": "R$737,99",
+            "categorias" : {
+                "primeiras" : [
+                    "Mais Vendido"
+                ],
+                "segundas" : [
+                    "Frete Gratis"
+                ]
+            }
+        },
+        "3": {
+            "avaliação": 4,
+            "nome": "Notebook Dell g5 5590",
+            "preço": "R$10.189,00",
+            "categorias" : {
+                "primeiras" : [
+                    "Frete Gratis"
+                ],
+                "segundas" : [
+                    " "
+                ]
+            }
+        },    
+        "4": {
+            "avaliação": 5,
+            "nome": "Mercedes-Benz C 180",
+            "preço": "R$106.900",
+            "categorias" : {
+                "primeiras" : [
+                    " "
+                ],
+                "segundas" : [
+                    " "
+                ]
+            }
+        },
+        "5": {
+            "avaliação": 4,
+            "nome": "Chocottone",
+            "preço": "R$32,90",
+            "categorias" : {
+                "primeiras" : [
+                    "Novo"
+                ],
+                "segundas" : [
+                    " "
+                ]
+            }
+        },
+        "6": {
+            "avaliação": 4,
+            "nome": "HDD Seagate 1tb",
+            "preço": "R$339,00",
+            "categorias" : {
+                "primeiras" : [
+                    "Frete Gratis"
+                ]
+            }
+        }
+    }
+}
