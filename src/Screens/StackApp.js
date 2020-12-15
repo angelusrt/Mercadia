@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput,TouchableOpacity } from "react-native"
+import React, { useState } from 'react';
+import { View, Text, TextInput,TouchableOpacity, LogBox} from "react-native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { colors, style } from "../Styles"
-import auth from "@react-native-firebase/auth";
 import * as GoogleSignin from "expo-google-sign-in";
 import fire from "./../FirebaseConfig";
 
@@ -44,11 +43,12 @@ function Login(){
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
 
+    LogBox.ignoreLogs(['Setting a timer']);
     //Funcionando
     function loginHandler(){
         fire
         .auth()
-        .signInWithEmailAndPassword(email, password)
+        .signInWithEmailAndPassword(email.trim(), password)
     }
 
     return(
@@ -88,6 +88,7 @@ function Register(){
     const[email, setEmail] = useState("");
     const[password, setPassword] = useState("");
 
+    LogBox.ignoreLogs(['Setting a timer']);
     //Funcionando
     function signinHandler(){
         fire.auth()
@@ -113,8 +114,8 @@ function Register(){
                 <Text style={ style.semititle }>Senha</Text>
                 <TextInput onChangeText={ text => setPassword(text)} style={ style.textInput }/>
                 
-                <Text style={ style.semititle }>Respita a senha</Text>
-                <TextInput style={ style.textInput }/>
+                {/* <Text style={ style.semititle }>Respita a senha</Text>
+                <TextInput style={ style.textInput }/> */}
                 
                 <Text style={{alignSelf: "center", ...style.demititle}}>Ou</Text>
 

@@ -3,30 +3,28 @@ import React, { useState, useEffect } from 'react';
 import { createStackNavigator } from "@react-navigation/stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { ScrollView, View, Text, Image, TextInput,TouchableOpacity, LogBox } from "react-native";
-import * as firebase from 'firebase';
 import { FontAwesome } from "@expo/vector-icons";
 
 import { colors, style } from "../Styles" 
 import fire from '../FirebaseConfig';
-import { initAsync } from 'expo-google-sign-in';
-import { debug } from 'react-native-reanimated';
 
 function Home(){
     const[components, setComponents] = useState([])
-    const[imgURL, setImgURL] = useState([])
     
     let userId = fire.auth().currentUser.uid;
     var myObject = {}
 
+    LogBox.ignoreLogs(['Setting a timer']);
+
     useEffect( () => {
-        fire.database().ref('itens/').once('value', snapshot => {
+        let isMounted = true;
+        fire.database().ref('itens/').on('value', snapshot => {
             let data = snapshot.val()
             let itens = Object.values(data)
             
-            setComponents(itens)
-    
+            if(isMounted) setComponents(itens)
         })
-
+        return () => {isMounted = false}
     },[])   
 
     function writeCarts(userId, item) {
@@ -50,7 +48,7 @@ function Home(){
             {
                 components.map((item, index) => {
                     return(
-                        <View style={{ marginVertical: 10, backgroundColor: colors.white, ...style.cardView }}>
+                        <View key={ index } style={{ marginVertical: 10, backgroundColor: colors.white, ...style.cardView }}>
                             <View style={{ flex: 1, marginRight: 15}}>
                                 <Image style={{ flex: 1, width: "100%" }} source={{ uri : item.image }} />
                             </View>
@@ -98,6 +96,8 @@ function Conta(){
     const[favorite, setFavorite] = useState([])
     const [user, setUser] = useState("")
 
+    LogBox.ignoreLogs(['Setting a timer']);
+
     let userId = fire.auth().currentUser.uid;
     let userEmail = fire.auth().currentUser.email;
 
@@ -106,44 +106,48 @@ function Conta(){
     }
 
     const authListener = () => {
+        let isMounted = true;
         fire.auth().onAuthStateChanged(user => {
             if(user){
-                setUser(user)
+                if(isMounted) setUser(user)
             }
             else{
-                setUser("")
+                if(isMounted) setUser("")
             }
         })
+        return () => {isMounted = false}
     }
 
     useEffect( () => {
-        fire.database().ref('itens/').once('value', snapshot => {
+        let isMounted = true;
+        fire.database().ref('itens/').on('value', snapshot => {
             let data = snapshot.val()
             let itens = Object.values(data)
             
-            setComponents(itens)
+            if(isMounted) setComponents(itens)
     
         })
+        return () => {isMounted = false}
     },[])   
 
     useEffect( () => { 
-
-        fire.database().ref('users/' + userId + "/carrinho/").once('value', snapshot => {
+        let isMounted = true;
+        fire.database().ref('users/' + userId + "/carrinho/").on('value', snapshot => {
             let data = snapshot.val()
             let itens = Object.values(data || "")
             
-            setChart(itens)
+            if(isMounted) setChart(itens)
     
         })
 
-        fire.database().ref('users/' + userId + "/favorito/").once('value', snapshot => {
+        fire.database().ref('users/' + userId + "/favorito/").on('value', snapshot => {
             let data = snapshot.val()
             let itens = Object.values(data || "")
             
-            setFavorite(itens)
+            if(isMounted) setFavorite(itens)
     
         })
-
+        return () => {isMounted = false}
     },[])   
 
     let carrinhoQuantidade = Object.keys(chart).length;
@@ -189,7 +193,7 @@ function Conta(){
                 { 
                     favorite.filter( item => item !== undefined && item != null).map((item, index) => {
                         return(
-                            <View style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
+                            <View key={index} style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
                                 <View style={{flex: 1, marginRight: 15}}>
                                 <Image style={{ flex: 1, width: "100%"}} source={{ uri : components[item].image }} />
                                 </View>
@@ -224,7 +228,7 @@ function Conta(){
                 { 
                     chart.filter( item => item !== undefined && item != null).map((item, index) => {
                         return (
-                            <View style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
+                            <View key={index} style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
                                 <View style={{flex: 1, marginRight: 15}}>
                                 <Image style={{ flex: 1, width: "100%"}} source={{ uri : components[item].image }} />
                                 </View>
@@ -329,11 +333,6 @@ function TabsApp(props) {
                     <FontAwesome name="search" color={color} size={size} />
                 ),
             }}/>
-            {/* {<TouchableOpacity
-                style={{ backgroundColor: colors.secundary, ... style.button}}
-            >
-                <Text style={ style.buttonText }>O</Text>
-            </TouchableOpacity>} */}
         </Tabs.Navigator>
     );
 }
