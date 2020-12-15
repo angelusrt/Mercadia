@@ -14,12 +14,8 @@ import { debug } from 'react-native-reanimated';
 function Home(){
     const[components, setComponents] = useState([])
     let userId = fire.auth().currentUser.uid;
+    var myObject = {}
 
-    function writeUserData(userId) {
-        fire.database().ref('users/' + userId).push(
-
-        )
-    }
     useEffect( () => {
         fire.database().ref('itens/').on('value', snapshot => {
             let data = snapshot.val()
@@ -27,14 +23,29 @@ function Home(){
             
             setComponents(itens)
     
-        })},[]
-    )   
+        })
+    },[])   
     
+    function writeCarts(userId, item) {
+        fire.database().ref('users/' + userId + "/carrinho/").update(
+            myObject = {
+                [item]: item
+            }
+        )
+    }
+
+    function writeFavorites(userId, item) {
+        fire.database().ref('users/' + userId + "/favorito/").update(
+            myObject = {
+                [item]: item
+            }
+        )
+    }
 
     return(
         <ScrollView style={{ backgroundColor: colors.white, ...style.cardWrapperView }} >
             {
-                components.map(item => {
+                components.map((item, index) => {
                     return(
                         <View style={{ marginVertical: 10, backgroundColor: colors.white, ...style.cardView }}>
                             <View style={{ flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
@@ -51,6 +62,7 @@ function Home(){
                                 <View style={{ marginTop: 20, flex: 1, flexDirection: 'row' }}>
                                     <TouchableOpacity
                                     style={{ backgroundColor: colors.primary, ...style.cardButton}}
+                                    onPress={() => writeCarts(userId, index)}
                                     >
                                         <View style={{ flexDirection: 'row'}}>
                                             <FontAwesome name="shopping-cart" color={colors.white} size={20} />
@@ -59,6 +71,7 @@ function Home(){
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                     style={{ marginLeft: 10, backgroundColor: colors.primary, ...style.cardButton}}
+                                    onPress={() => writeFavorites(userId, index)}
                                     >
                                         <View style={{ flexDirection: 'row'}}>
                                             <FontAwesome name="heart" color={colors.white} size={20} />
@@ -76,7 +89,13 @@ function Home(){
 }
 
 function Conta(){
-    const [user, setUser] = useState("");
+    const[components, setComponents] = useState([])
+    const[chart, setChart] = useState([])
+    const[favorite, setFavorite] = useState([])
+    const [user, setUser] = useState("")
+
+    let userId = fire.auth().currentUser.uid;
+    let userEmail = fire.auth().currentUser.email;
 
     const logoutHandler = () => {
         fire.auth().signOut()
@@ -93,12 +112,56 @@ function Conta(){
         })
     }
 
+    useEffect( () => {
+        fire.database().ref('itens/').on('value', snapshot => {
+            let data = snapshot.val()
+            let itens = Object.values(data)
+            
+            setComponents(itens)
+    
+        })
+    },[])   
+
+    useEffect( () => { 
+
+        fire.database().ref('users/' + userId + "/carrinho/").on('value', snapshot => {
+            let data = snapshot.val()
+            let itens = Object.values(data || "")
+            
+            setChart(itens)
+    
+        })
+
+        fire.database().ref('users/' + userId + "/favorito/").on('value', snapshot => {
+            let data = snapshot.val()
+            let itens = Object.values(data || "")
+            
+            setFavorite(itens)
+    
+        })
+
+    },[])   
+
+    let carrinhoQuantidade = Object.keys(chart).length;
+    let favoritoQuantidade = Object.keys(favorite).length;
+
     useEffect(() => authListener(), []) 
+
+    function deleteCharts(userId, item) {
+        fire.database().ref('users/' + userId + "/carrinho/").child(item).remove()
+    }
+
+    function deleteFavorites(userId, item) {
+        fire.database().ref('users/' + userId + "/favorito/").child(item).remove()
+    }
+    
+    //console.log(favorite.filter( item => item !== undefined && item != null).map( item => components[item].nome))
+
     return(
         <View style={{backgroundColor: colors.white, ...style.view}} >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <FontAwesome name="chevron-right" color={colors.primary} size={15} />
-                <Text style={{ marginLeft: 10, color: colors.primary, ...style.cardSubtitle}}>angelusrt@gmail.com</Text>
+                <Text style={{ marginLeft: 10, color: colors.primary, ...style.cardSubtitle}}>{userEmail}</Text>
             </View>
             <TouchableOpacity
             style={{ marginVertical: 20, alignItems: "center", backgroundColor: colors.primary, ...style.cardButton}}
@@ -112,42 +175,72 @@ function Conta(){
             <Text style={{ color: colors.secundary, fontSize: 17, fontWeight: "bold"}}>Favoritos</Text>
             <ScrollView 
                 horizontal={true}
-                contentContainerStyle={{ width: `${100*1}%`}}
+                contentContainerStyle={{ width: `${ 100 * favoritoQuantidade}%`}}
                 showsHorizontalScrollIndicator={false}
                 scrollEventThrottle={200}
                 decelerationRate="fast"
                 pagingEnabled
                 style={{height: 30}}
             >
-                <View style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
-                    <View style={{flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
+                { 
+                    favorite.filter( item => item !== undefined && item != null).map((item, index) => {
+                        return(
+                            <View style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
+                                <View style={{flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
 
-                    </View>
-                    <View style={{flex: 2}}>
-                        <Text style={{ color: colors.secundary, ...style.cardTitle }}>Samsung Galaxy A21s</Text>
-                        <Text style={{ color: colors.secundary, ...style.cardSubtitle }}>R$1299,00</Text>
-                        <TouchableOpacity
-                            style={{ width: "50%", marginVertical: 20, backgroundColor: colors.primary, ...style.cardButton}}
-                        >
-                            <View style={{ flexDirection: 'row'}}>
-                                <FontAwesome name="close" color={colors.white} size={20} />
-                                <Text style={ style.cardButtonText }>Excluir</Text>
+                                </View>
+                                <View style={{flex: 2}}>
+                                    <Text style={{ color: colors.secundary, ...style.cardTitle }}>{components[item].nome}</Text>
+                                    <Text style={{ color: colors.secundary, ...style.cardSubtitle }}>{components[item].preço}</Text>
+                                    <TouchableOpacity
+                                        style={{ width: "50%", marginVertical: 20, backgroundColor: colors.primary, ...style.cardButton}}
+                                        onPress={ () => deleteFavorites(userId, item)}
+                                    >
+                                        <View style={{ flexDirection: 'row'}}>
+                                            <FontAwesome name="close" color={colors.white} size={20} />
+                                            <Text style={ style.cardButtonText }>Excluir</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                        )
+                    })
+                }
             </ScrollView>
             <Text style={{ color: colors.secundary, fontSize: 17, fontWeight: "bold"}}>Carrinho</Text>
             <ScrollView
                 horizontal={true}
-                contentContainerStyle={{ width: `${100*1}%`}}
+                contentContainerStyle={{ width: `${ 100 * carrinhoQuantidade }%`}}
                 showsHorizontalScrollIndicator={false}
                 scrollEventThrottle={200}
                 decelerationRate="fast"
                 pagingEnabled
                 style={{height: 30}}
             >
+                { 
+                    chart.filter( item => item !== undefined && item != null).map((item, index) => {
+                        return (
+                            <View style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
+                                <View style={{flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
 
+                                </View>
+                                <View style={{flex: 2}}>
+                                    <Text style={{ color: colors.secundary, ...style.cardTitle }}>{components[item].nome}</Text>
+                                    <Text style={{ color: colors.secundary, ...style.cardSubtitle }}>{components[item].preço}</Text>
+                                    <TouchableOpacity
+                                        style={{ width: "50%", marginVertical: 20, backgroundColor: colors.primary, ...style.cardButton}}
+                                        onPress={ () => deleteCharts(userId, item)}
+                                    >
+                                        <View style={{ flexDirection: 'row'}}>
+                                            <FontAwesome name="close" color={colors.white} size={20} />
+                                            <Text style={ style.cardButtonText }>Excluir</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        )
+                    })
+                }
             </ScrollView>
         </View>
     )
