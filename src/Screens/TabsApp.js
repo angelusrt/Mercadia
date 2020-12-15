@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { createStackNavigator } from "@react-navigation/stack"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { ScrollView, View, Text, TextInput,TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, Image, TextInput,TouchableOpacity, LogBox } from "react-native";
 import * as firebase from 'firebase';
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -13,19 +13,22 @@ import { debug } from 'react-native-reanimated';
 
 function Home(){
     const[components, setComponents] = useState([])
+    const[imgURL, setImgURL] = useState([])
+    
     let userId = fire.auth().currentUser.uid;
     var myObject = {}
 
     useEffect( () => {
-        fire.database().ref('itens/').on('value', snapshot => {
+        fire.database().ref('itens/').once('value', snapshot => {
             let data = snapshot.val()
             let itens = Object.values(data)
             
             setComponents(itens)
     
         })
+
     },[])   
-    
+
     function writeCarts(userId, item) {
         fire.database().ref('users/' + userId + "/carrinho/").update(
             myObject = {
@@ -48,7 +51,8 @@ function Home(){
                 components.map((item, index) => {
                     return(
                         <View style={{ marginVertical: 10, backgroundColor: colors.white, ...style.cardView }}>
-                            <View style={{ flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
+                            <View style={{ flex: 1, marginRight: 15}}>
+                                <Image style={{ flex: 1, width: "100%" }} source={{ uri : item.image }} />
                             </View>
                             <View style={{ flex: 2 }}>
                                 <View>
@@ -113,7 +117,7 @@ function Conta(){
     }
 
     useEffect( () => {
-        fire.database().ref('itens/').on('value', snapshot => {
+        fire.database().ref('itens/').once('value', snapshot => {
             let data = snapshot.val()
             let itens = Object.values(data)
             
@@ -124,7 +128,7 @@ function Conta(){
 
     useEffect( () => { 
 
-        fire.database().ref('users/' + userId + "/carrinho/").on('value', snapshot => {
+        fire.database().ref('users/' + userId + "/carrinho/").once('value', snapshot => {
             let data = snapshot.val()
             let itens = Object.values(data || "")
             
@@ -132,7 +136,7 @@ function Conta(){
     
         })
 
-        fire.database().ref('users/' + userId + "/favorito/").on('value', snapshot => {
+        fire.database().ref('users/' + userId + "/favorito/").once('value', snapshot => {
             let data = snapshot.val()
             let itens = Object.values(data || "")
             
@@ -186,8 +190,8 @@ function Conta(){
                     favorite.filter( item => item !== undefined && item != null).map((item, index) => {
                         return(
                             <View style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
-                                <View style={{flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
-
+                                <View style={{flex: 1, marginRight: 15}}>
+                                <Image style={{ flex: 1, width: "100%"}} source={{ uri : components[item].image }} />
                                 </View>
                                 <View style={{flex: 2}}>
                                     <Text style={{ color: colors.secundary, ...style.cardTitle }}>{components[item].nome}</Text>
@@ -221,8 +225,8 @@ function Conta(){
                     chart.filter( item => item !== undefined && item != null).map((item, index) => {
                         return (
                             <View style={{flex: 1, flexDirection: "row", padding: 15, marginVertical: 15}}>
-                                <View style={{flex: 1, backgroundColor: colors.secundary, marginRight: 15}}>
-
+                                <View style={{flex: 1, marginRight: 15}}>
+                                <Image style={{ flex: 1, width: "100%"}} source={{ uri : components[item].image }} />
                                 </View>
                                 <View style={{flex: 2}}>
                                     <Text style={{ color: colors.secundary, ...style.cardTitle }}>{components[item].nome}</Text>
@@ -245,6 +249,7 @@ function Conta(){
         </View>
     )
 }
+
 function Pesquisa(){
     return(
         <View style={{ backgroundColor: colors.white, justifyContent: "flex-end", ...style.view}}>
@@ -268,7 +273,6 @@ function HomeStack(){
         </Stack.Navigator>
     )        
 }
-
 
 function ContaStack(){
     const Stack = createStackNavigator()
