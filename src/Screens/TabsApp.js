@@ -58,8 +58,8 @@ function Home(){
                                 <Text style={{ color: colors.secundary, ...style.cardTitle }}>{ item.nome }</Text>
                                 <Text style={{ color: colors.secundary, ...style.cardSubtitle }}>{ item.preço }</Text>
                                 <View style={{ marginVertical: 10, flex: 1, flexDirection: 'row' }}>
-                                    <View style={ style.cardSpecialWrapper }><Text style={ style.cardSpecial }>{ item.categorias.primeiras }</Text></View>
-                                    <View style={{ marginLeft: 10, ...style.cardSpecialWrapper }}><Text style={ style.cardSpecial }>{ item.categorias.segundas }</Text></View>
+                                    { (item.categorias.primeiras != " ") && <View style={ style.cardSpecialWrapper }><Text style={ style.cardSpecial }>{ item.categorias.primeiras }</Text></View>}
+                                    { (item.categorias.segundas != " ") && <View style={{ marginLeft: 10, ...style.cardSpecialWrapper }}><Text style={ style.cardSpecial }>{ item.categorias.segundas }</Text></View>}
                                 </View>
                                 <View style={{ marginTop: 20, flex: 1, flexDirection: 'row' }}>
                                     <TouchableOpacity
@@ -256,8 +256,8 @@ function Conta(){
 
 function Pesquisa(){
     return(
-        <View style={{ backgroundColor: colors.white, justifyContent: "flex-end", ...style.view}}>
-            <TextInput style={{ borderColor: colors.primary, borderWidth: 1, padding: "3%" }}/>
+        <View style={{ backgroundColor: colors.white, justifyContent: "center", ...style.view}}>
+            <TextInput placeholder="clique e pesquise!" style={{ borderColor: colors.primary, borderWidth: 1, padding: "3%" }}/>
         </View>
     )
 }
@@ -316,7 +316,7 @@ function TabsApp(props) {
     return (
         <Tabs.Navigator 
             tabBarOptions={{tabStyle: { borderTopWidth: 0 }, style: { borderTopWidth: 0, elevation: 0 }, 
-            activeTintColor: colors.primary,showLabel: false
+            activeTintColor: colors.primary,showLabel: false, keyboardHidesTabBar: true
         }}>
             <Tabs.Screen name="Home" component={HomeStack} options={{
                 tabBarIcon: ({ color, size }) => (
